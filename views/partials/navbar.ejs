@@ -1,0 +1,12 @@
+<!-- /views/partials/navbar.ejs -->
+
+<% if(currentUser) { %>
+	<h3>Logged In: <%= currentUser.username %> <a href="/logout">Logout</a></h3>
+<% } else { %>
+	<h3><a href="/login">Login</a> or <a href="/register">Register</a></h3>
+<% } %>
+
+<h3><a href="/">Home</a></h3>
+
+<hr>
+

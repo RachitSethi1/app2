@@ -1,0 +1,7 @@
+<!-- /views/partials/flash.ejs -->
+
+<% if(success && success.length) { %>
+	<h3><%= success %></h3>
+<% } else if(error && error.length) { %>
+	<h3><%= error %></h3>
+<% } %>

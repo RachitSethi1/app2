@@ -1,0 +1,33 @@
+<!-- /views/users/register.ejs -->
+
+<% layout('layouts/boilerplate') %>
+
+<form action="/register" method="POST">	
+	<div>
+		<label for="username">Username: </label>
+		<input type="text" id="username" name="username" required>
+
+		<label for="password">Password: </label>
+		<input type="password" id="password" name="password" required>
+	
+		<label for="name">Name: </label>
+		<input type="text" id="name" name="name" required>
+
+		<label for="mobile">Mobile: </label>
+		<input type="number" id="mobile" name="mobile" required>
+	</div>
+	<div>
+		<label for="society">Society: </label>
+		<select id="society" name="society" required>
+			<option value="" disabled hidden selected>--Choose Society--</option>
+			<option value="CHD">CHD Avenue 71</option>
+			<option value="JMD">JMD Gardens</option>
+		</select>
+	
+		<span id="towerContainer"></span>
+		<span id="flatContainer"></span>
+	</div>
+	<button>Register</button>
+</form>
+
+<script src="/js/register.js"></script>

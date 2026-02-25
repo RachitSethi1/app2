@@ -1,0 +1,13 @@
+<!-- /views/users/login.ejs -->
+
+<% layout('layouts/boilerplate') %>
+
+<form action="/login" method="POST">
+	<label for="username">Username: </label>
+	<input type="text" id="username" name="username">
+	
+	<label for="passowrd">Password: </label>
+	<input type="password" id="password" name="password">
+	
+	<button>Login</button>
+</form>
