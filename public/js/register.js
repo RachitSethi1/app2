@@ -1,4 +1,4 @@
-<!-- /public/js/register.js -->
+// /public/js/js.js
 
 const societySelectElement = document.getElementById('society');
 const towerContainerElement = document.getElementById('towerContainer');

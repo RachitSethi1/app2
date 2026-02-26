@@ -12,6 +12,10 @@ const locationSchema = new mongoose.Schema({
 	users: [{
 		type: mongoose.Types.ObjectId,
 		ref: 'User'
+	}],
+	bookings: [{
+		type: mongoose.Types.ObjectId,
+		ref: 'Booking'
 	}]
 });
 

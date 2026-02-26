@@ -8,12 +8,12 @@ module.exports.validateRegisterForm = async (req, res, next) => {
 	const userDetails = { username, password, name, mobile };
 	const locationDetails = { society, tower, flat };
 	
-	const { error1 } = userSchema.validate(userDetails);
+	const { error: error1 } = userSchema.validate(userDetails);
 	if(error1) {
 		req.flash('error', error1.message);
 		return res.redirect('/register');
 	}
-	const { error2 } = locationSchema.validate(locationDetails);
+	const { error: error2 } = locationSchema.validate(locationDetails);
 	if(error2) {
 		req.flash('error', error2.message);
 		return res.redirect('/register');

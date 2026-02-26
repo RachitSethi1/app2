@@ -13,6 +13,7 @@ const mongoose = require('mongoose');
 const { DB_URI, SECRET } = require('./env');
 const User = require('./models/users');
 const usersRoutes = require('./routes/users');
+const bookingRoutes = require('./routes/bookings');
 
 mongoose.connect(DB_URI);
 mongoose.connection.on('error', err => { console.log('MongoDB connection error:', err); });
@@ -48,7 +49,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
 	res.render('home');
 });
-
 app.use('/', usersRoutes);
+app.use('/bookings', bookingsRoutes);
 
 app.listen(3000, () => { console.log('Server running on http://localhost:3000'); });
