@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 const { DB_URI, SECRET } = require('./env');
 const User = require('./models/users');
 const usersRoutes = require('./routes/users');
-const bookingRoutes = require('./routes/bookings');
+const bookingsRoutes = require('./routes/bookings');
 
 mongoose.connect(DB_URI);
 mongoose.connection.on('error', err => { console.log('MongoDB connection error:', err); });

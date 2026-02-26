@@ -17,7 +17,7 @@ module.exports.locationSchema = Joi.object({
 
 module.exports.bookingSchema = Joi.object({
 	date: Joi.string().required(),
-	slot: Joi.string().required(),
+	time: Joi.string().required(),
 	service: Joi.string().required(),
 	status: Joi.string().valid('Scheduled', 'Served').required()
 });

@@ -18,7 +18,7 @@ module.exports.registerUser = async (req, res, next) => {
 	location.users.push(newUser._id);
 	await location.save();
 	
-	newUser.address = location._id;
+	newUser.location = location._id;
 	const registeredUser = await User.register(newUser, password);
 	
 	req.login(registeredUser, err => {

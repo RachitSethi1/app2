@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
-    date: String,
-    slot: String,
+	date: String,
+	time: String,
     service: String,
     status: {
         type: String,
@@ -26,7 +26,7 @@ module.exports = mongoose.model('Booking', bookingSchema);
 
 //  booking:
 //      date
-//      slot
+//      time
 //      service
 //      status
 //      user

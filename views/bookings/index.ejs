@@ -1,0 +1,15 @@
+<!-- /views/bookings/index.ejs -->
+
+<% layout('layouts/boilerplate') %>
+
+<h2>My Bookings</h2>
+
+<% if(myBookings && myBookings.length !== 0) { %>
+	<ol>
+		<% for(let i=0; i<myBookings.length; i++) { %>
+			<li><%= `Date: ${myBookings[i].date} | Time: ${myBookings[i].time} | Service: ${myBookings[i].service} | Status: ${myBookings[i].status}` %></li>
+		<% } %>
+	</ol>
+<% } else { %>
+	<h3>No Bookings Yet</h3>
+<% } %>

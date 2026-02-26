@@ -5,9 +5,48 @@
 <h2>Choose Slot</h2>
 
 <table>
-    <% for() { %>
-        <tr>
-            
-        </tr>
-    <% } %>
+	<tr>
+		<th>Date/Time</th>
+		<th>10 am</th>
+		<th>12 pm</th>
+		<th>2 pm</th>
+		<th>4 pm</th>
+	</tr>
+	<% for(let i=0; i<all.length; i+=4) { %>
+		<tr>
+			<% for(let j=0; j<5; j++) { %>
+				<% if(j === 0) { %>
+					<th><%= all[i].date %></th> <!-- pretty Date format -->
+				<% } else { %>
+					<td>
+						<% if(free.find(u => u.date === all[i+j-1].date && u.time === all[i+j-1].time)) { %>
+							<button type="button" class="open-dialog-btn" data-date="<%= all[i+j-1].date %>" data-time="<%= all[i+j-1].time %>">Book</button>
+						<% } else { %>
+							Unavailable
+						<% } %>
+					</td>
+				<% } %>
+			<% } %>
+		</tr>
+	<% } %>
 </table>
+
+
+<dialog id="actionDialog">
+	<form id="actionForm" action="/bookings" method="POST">
+		<label for="date">Date: </label>
+		<input type="text" id="date" name="date" readonly required>
+		
+		<label for="time">Time: </label>
+		<input type="text" id="time" name="time" readonly required>
+		
+		<label for="service">Service: </label>
+		<input type="text" id="service" name="service" required>
+	
+		<button>Book</button>
+		<button type="button" id="cancelBtn">Cancel</button>
+	</form>
+</dialog>
+
+
+<script src="/bookings/create.js"></script>
