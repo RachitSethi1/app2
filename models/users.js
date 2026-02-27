@@ -1,4 +1,4 @@
-// models/users.js
+// /models/users.js
 
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose').default;

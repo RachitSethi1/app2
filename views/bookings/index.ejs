@@ -4,12 +4,16 @@
 
 <h2>My Bookings</h2>
 
+<% if(!hasAlreadyScheduled) { %>
+	<h3>No Scheduled Bookings, <a href="/bookings/create">Book Now</a></h3>
+<% } %>
+
 <% if(myBookings && myBookings.length !== 0) { %>
 	<ol>
 		<% for(let i=0; i<myBookings.length; i++) { %>
-			<li><%= `Date: ${myBookings[i].date} | Time: ${myBookings[i].time} | Service: ${myBookings[i].service} | Status: ${myBookings[i].status}` %></li>
+			<li><%= `Date: ${myBookings[i].date} | Time: ${myBookings[i].time} | Service: ${myBookings[i].service}` %> <a href="/bookings/<%= myBookings[i]._id %>">details</a></li>
 		<% } %>
 	</ol>
 <% } else { %>
-	<h3>No Bookings Yet</h3>
+	<h3>No Booking History :(</h3>
 <% } %>

@@ -1,0 +1,111 @@
+<% layout('layouts/boilerplate') %>
+<!-- <link rel="stylesheet" href="/bookings/edit.css"> -->
+<link rel="stylesheet" href="/css.css">
+
+<div class="edit-page-wrapper">
+    <header class="edit-header">
+        <h2>Modify Your Booking</h2>
+        <div class="current-info-card">
+            <div class="info-item"><strong>Date</strong><span><%= date %></span></div>
+            <div class="info-item"><strong>Time</strong><span><%= time %></span></div>
+            <div class="info-item"><strong>Service</strong><span><%= service %></span></div>
+        </div>
+    </header>
+
+    <div class="management-actions">
+        <button type="button" class="action-btn" id="change-service-btn">Update Service</button>
+        <button type="button" class="action-btn" id="change-slot-btn">Reschedule Slot</button>
+        <form action="/bookings/<%= _id %>?_method=DELETE" method="POST" class="delete-form" onsubmit="return confirm('Permanently cancel this booking?')">
+            <button class="btn-danger">Cancel Booking</button>
+        </form>
+    </div>
+
+    <div id="service-form-container" class="edit-panel" hidden></div>
+
+    <div id="slots-table-container" class="edit-panel" hidden>
+        <h4 class="panel-title">Select a New Appointment Time</h4>
+        <table class="main-calendar">
+            <thead>
+                <tr>
+                    <% 
+                      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                      const timeSlots = ['10 am', '12 pm', '2 pm', '4 pm'];
+                      const uniqueDates = [...new Set(calendarArr.map(item => item.date))].sort();
+                      const firstDateObj = new Date(uniqueDates[0] + 'T00:00:00');
+                      const startDayIndex = firstDateObj.getDay();
+                      
+                      const orderedDays = [];
+                      for (let i = 0; i < 7; i++) {
+                        orderedDays.push(dayNames[(startDayIndex + i) % 7]);
+                      }
+                      orderedDays.forEach(day => { %>
+                        <th><%= day %></th>
+                    <% }); %>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                  const weeks = [];
+                  for (let i = 0; i < uniqueDates.length; i += 7) {
+                    weeks.push(uniqueDates.slice(i, i + 7));
+                  }
+                  weeks.forEach(week => { %>
+                    <tr>
+                        <% week.forEach(dateStr => { %>
+                            <td class="date-column">
+                                <div class="date-header"><%= dateStr %></div>
+                                <div class="time-grid">
+                                    <% timeSlots.forEach(slot => { 
+                                        const isAvailable = availableSlotsArr.some(s => 
+                                            String(s.date).trim() === String(dateStr).trim() && 
+                                            String(s.slot || s.time).trim() === String(slot).trim()
+                                        );
+                                    %>
+                                        <button 
+                                            type="button" 
+                                            class="slot-btn <%= isAvailable ? 'available' : 'dimmed' %>"
+                                            <%= !isAvailable ? 'disabled' : '' %>
+                                            onclick="openBookingModal('<%= dateStr %>', '<%= slot %>')"
+                                        >
+                                            <%= slot %>
+                                        </button>
+                                    <% }); %>
+                                </div>
+                            </td>
+                        <% }); %>
+                        <% if (week.length < 7) { %>
+                            <% for(let i = 0; i < (7 - week.length); i++) { %> <td class="empty-cell"></td> <% } %>
+                        <% } %>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="bookingModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h3>Confirm Reschedule</h3>
+        <p id="modalDetails" class="modal-subtext"></p>
+        <form action="/bookings/<%= _id %>?_method=PATCH" method="POST">
+            <input type="hidden" name="date" id="formDate">
+            <input type="hidden" name="time" id="formTime">
+            <div class="form-group">
+                <label for="service">Update Service Note:</label>
+                <input type="text" name="service" id="service" value="<%= service %>" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Back</button>
+                <button type="submit" class="btn-primary">Confirm Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const bookingId = '<%= _id %>';
+    const bookingDate = '<%= date %>';
+    const bookingTime = '<%= time %>';
+    const bookingService = '<%= service %>';
+</script>
+<script src="/bookings/edit.js"></script>

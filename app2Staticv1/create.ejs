@@ -1,0 +1,108 @@
+<!-- /views/bookings/create.ejs -->
+
+<% layout('layouts/boilerplate') %>
+
+<!-- <link rel="stylesheet" href="/bookings/create.css"> -->
+
+<link rel="stylesheet" href="/css.css">
+
+<h2>Choose Slot</h2>
+
+<table class="main-calendar">
+  <thead>
+    <tr>
+      <% 
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const timeSlots = ['10 am', '12 pm', '2 pm', '4 pm'];
+
+        // 1. Get unique sorted dates from calendarArr
+        const uniqueDates = [...new Set(calendarArr.map(item => item.date))].sort();
+        
+        // 2. Determine the starting day index based on the first date
+        const firstDateObj = new Date(uniqueDates[0] + 'T00:00:00');
+        const startDayIndex = firstDateObj.getDay();
+
+        // 3. Reorder day headers to start from the first date's day
+        const orderedDays = [];
+        for (let i = 0; i < 7; i++) {
+          orderedDays.push(dayNames[(startDayIndex + i) % 7]);
+        }
+      %>
+      
+      <% orderedDays.forEach(day => { %>
+        <th><%= day %></th>
+      <% }); %>
+    </tr>
+  </thead>
+  <tbody>
+    <% 
+      // 4. Chunk uniqueDates into rows of 7
+      const weeks = [];
+      for (let i = 0; i < uniqueDates.length; i += 7) {
+        weeks.push(uniqueDates.slice(i, i + 7));
+      }
+    %>
+
+    <% weeks.forEach(week => { %>
+      <tr>
+        <% week.forEach(dateStr => { %>
+          <td class="date-column">
+            <div class="date-header"><%= dateStr %></div>
+            <div class="time-grid">
+              <% timeSlots.forEach(slot => { %>
+                
+                <% 
+                  // 5. Array-only check: compare raw strings
+                  const isAvailable = availableSlotsArr.some(s => {
+                    return String(s.date).trim() === String(dateStr).trim() && 
+                           String(s.slot || s.time).trim() === String(slot).trim();
+                  });
+                %>
+
+                <button 
+                  type="button"
+                  class="slot-btn <%= isAvailable ? 'available' : 'dimmed' %>"
+                  <%= !isAvailable ? 'disabled' : '' %>
+                  onclick="openBookingModal('<%= dateStr %>', '<%= slot %>')"
+                >
+                  <%= slot %>
+                </button>
+              <% }); %>
+            </div>
+          </td>
+        <% }); %>
+
+        <% /* Fill remaining cells if the last week is incomplete */ %>
+        <% if (week.length < 7) { %>
+          <% for(let i = 0; i < (7 - week.length); i++) { %>
+            <td class="empty-cell"></td>
+          <% } %>
+        <% } %>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
+
+<div id="bookingModal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h3>Complete Your Booking</h3>
+    <p id="modalDetails" style="font-weight: bold; color: #555;"></p>
+    
+    <form action="/bookings" method="POST">
+      <input type="hidden" name="date" id="formDate">
+      <input type="hidden" name="time" id="formTime">
+      
+      <div class="form-group" style="margin: 15px 0;">
+        <label for="service">Service Required:</label>
+        <input type="text" name="service" id="service" required style="width: 100%; padding: 8px;">
+      </div>
+
+      <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn-submit">Confirm Booking</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/bookings/create.js"></script>

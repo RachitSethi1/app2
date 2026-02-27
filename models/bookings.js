@@ -3,13 +3,19 @@
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
-	date: String,
-	time: String,
-    service: String,
-    status: {
-        type: String,
-        enum: ['Scheduled', 'Served']
-    },
+	date: {
+		type: String,
+		required: true
+	},
+	time: {
+		type: String,
+		enum: ['10 am', '12 pm', '2 pm', '4 pm'],
+		required: true
+	},
+    service: {
+		type: String,
+		required: true
+	},
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User'
@@ -28,7 +34,6 @@ module.exports = mongoose.model('Booking', bookingSchema);
 //      date
 //      time
 //      service
-//      status
 //      user
 //      location
 

@@ -1,29 +1,15 @@
-// /public/bookings/create.js
+function openBookingModal(date, time) {
+    document.getElementById('formDate').value = date;
+    document.getElementById('formTime').value = time;
+    document.getElementById('modalDetails').innerHTML = `Booking for <strong>${date}</strong> at <strong>${time}</strong>`;
+    document.getElementById('bookingModal').style.display = 'flex';
+}
 
-// select necessary elements
-const dialog = document.getElementById('actionDialog');
-const form = document.getElementById('actionForm');
-const closeBtn = document.getElementById('cancelBtn');
+function closeModal() {
+    document.getElementById('bookingModal').style.display = 'none';
+}
 
-// select input field within form to be pre filled
-const dateInputField = document.getElementById('date');
-const timeInputField = document.getElementById('time');
-
-// select button to add event listeners to 
-const actionBtns = document.querySelectorAll('.open-dialog-btn');
-
-actionBtns.forEach(btn => {
-	btn.addEventListener('click', event => {
-		const dateValue = btn.dataset.date;
-		const timeValue = btn.dataset.time;
-		
-		dateInputField.value = dateValue;
-		timeInputField.value = timeValue;
-		
-		dialog.showModal();
-	});
-});
-
-closeBtn.addEventListener('click', e => {
-	dialog.close();
-});
+window.onclick = function(event) {
+    const modal = document.getElementById('bookingModal');
+    if (event.target == modal) closeModal();
+};

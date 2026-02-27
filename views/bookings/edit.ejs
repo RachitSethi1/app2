@@ -2,11 +2,31 @@
 
 <div class="page-wrapper">
     <header class="page-header">
-        <h2>Schedule an Appointment</h2>
-        <p class="page-subtitle">Select an available time slot below to book your service.</p>
+        <h2>Manage Booking</h2>
+        <p class="page-subtitle">View your details, update your service, or reschedule.</p>
     </header>
 
-    <div class="calendar-panel">
+    <div class="info-card">
+        <span class="card-badge">Current Appointment</span>
+        <div class="details-grid">
+            <div class="detail-item"><label>Date</label><p><%= date %></p></div>
+            <div class="detail-item"><label>Time</label><p><%= time %></p></div>
+            <div class="detail-item"><label>Service Note</label><p><%= service %></p></div>
+        </div>
+        
+        <div class="action-bar">
+            <button type="button" class="btn btn-outline" id="change-service-btn">Update Service</button>
+            <button type="button" class="btn btn-outline" id="change-slot-btn">Reschedule Slot</button>
+            <form action="/bookings/<%= _id %>?_method=DELETE" method="POST" style="margin-left:auto;" onsubmit="return confirm('Permanently cancel this booking?')">
+                <button class="btn btn-danger">Cancel Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="service-form-container" class="calendar-panel" hidden></div>
+
+    <div id="slots-table-container" class="calendar-panel" hidden>
+        <h3>Select New Time Slot</h3>
         <table class="main-calendar">
             <thead>
                 <tr>
@@ -32,8 +52,7 @@
                                 <div class="time-grid">
                                     <% timeSlots.forEach(slot => { 
                                         const isAvailable = availableSlotsArr.some(s => 
-                                            String(s.date).trim() === String(dateStr).trim() && 
-                                            String(s.slot || s.time).trim() === String(slot).trim()
+                                            String(s.date).trim() === String(dateStr).trim() && String(s.slot || s.time).trim() === String(slot).trim()
                                         );
                                     %>
                                         <button type="button" class="slot-btn <%= isAvailable ? 'available' : 'dimmed' %>" <%= !isAvailable ? 'disabled' : '' %> onclick="openBookingModal('<%= dateStr %>', '<%= slot %>')">
@@ -53,21 +72,27 @@
 
 <div id="bookingModal" class="modal-overlay">
     <div class="modal-content">
-        <h3>Complete Booking</h3>
+        <h3>Confirm Reschedule</h3>
         <p id="modalDetails" class="modal-subtext"></p>
-        <form action="/bookings" method="POST">
+        <form action="/bookings/<%= _id %>?_method=PATCH" method="POST">
             <input type="hidden" name="date" id="formDate">
             <input type="hidden" name="time" id="formTime">
             <div class="form-group">
-                <label for="service">Service Required</label>
-                <input type="text" name="service" id="service" placeholder="e.g. Consultation" required>
+                <label for="service">Update Service Note</label>
+                <input type="text" name="service" id="service" value="<%= service %>" required>
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Back</button>
+                <button type="submit" class="btn btn-primary">Confirm Changes</button>
             </div>
         </form>
     </div>
 </div>
 
-<script src="/bookings/create.js"></script>
+<script>
+    const bookingId = '<%= _id %>';
+    const bookingDate = '<%= date %>';
+    const bookingTime = '<%= time %>';
+    const bookingService = '<%= service %>';
+</script>
+<script src="/bookings/edit.js"></script>

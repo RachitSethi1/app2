@@ -33,8 +33,10 @@ module.exports.renderLoginForm = (req, res) => {
 };
 
 module.exports.postLoginUser = (req, res) => {
+	const redirectUrl = req.session.returnTo || '/';
+	delete req.session.returnTo;
 	req.flash('success', 'Logged In Successfully');
-	res.redirect('/');
+	res.redirect(redirectUrl);
 };
 
 module.exports.logoutUser = (req, res, next) => {

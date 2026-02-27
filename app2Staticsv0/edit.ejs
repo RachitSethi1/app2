@@ -1,0 +1,70 @@
+<!-- /views/bookings/edit.ejs -->
+
+<% layout('layouts/boilerplate') %>
+
+<h2>Modify Booking</h2>
+<h3>Booking Details:</h3>
+<h4>Date: <%= date %></h4>
+<h4>Time: <%= time %></h4>
+<h4>Service: <%= service %></h4>
+
+<button type="button" id="change-service-btn">Change Service</button>
+<button type="button" id="change-slot-btn">Change Slot</button>
+<form action="/bookings/<%= _id %>?_method=DELETE" method="POST">
+	<button>Delete Booking</button>
+</form>
+
+<div id="container">
+</div>
+
+<div id="slots-table-container" hidden>
+	<table>
+		<tr>
+			<th>Date/Time</th>
+			<th>10 am</th>
+			<th>12 pm</th>
+			<th>2 pm</th>
+			<th>4 pm</th>
+		</tr>
+		<% for(let i=0; i<calendarArr.length; i+=4) { %>
+			<tr>
+				<% for(let j=0; j<5; j++) { %>
+					<% if(j === 0) { %>
+						<th><%= calendarArr[i].date %></th> <!-- pretty Date format -->
+					<% } else { %>
+						<td>
+							<% if(availableSlotsArr.find(u => u.date === calendarArr[i+j-1].date && u.time === calendarArr[i+j-1].time)) { %>
+								<button type="button" class="open-dialog-btn" data-date="<%= calendarArr[i+j-1].date %>" data-time="<%= calendarArr[i+j-1].time %>">Book</button>
+							<% } else { %>
+								Unavailable
+							<% } %>
+						</td>
+					<% } %>
+				<% } %>
+			</tr>
+		<% } %>
+	</table>
+
+
+	<dialog id="actionDialog">
+		<form id="actionForm" action="/bookings/<%= _id %>?_method=PATCH" method="POST">
+			<label for="date">Date: </label>
+			<input type="text" id="date" name="date" readonly required>
+		
+			<label for="time">Time: </label>
+			<input type="text" id="time" name="time" readonly required>
+		
+			<label for="service">Service: </label>
+			<input type="text" id="service" name="service" value="<%= service %>" required>
+	
+			<button>Book</button>
+			<button type="button" id="cancelBtn">Cancel</button>
+		</form>
+	</dialog>
+</div>
+
+<script> const bookingId = '<%= _id %>';</script>
+<script> const bookingDate = '<%= date %>';</script>
+<script> const bookingTime = '<%= time %>';</script>
+<script> const bookingService = '<%= service %>';</script>
+<script src="/bookings/edit.js"></script>

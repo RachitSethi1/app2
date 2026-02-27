@@ -1,0 +1,23 @@
+<!-- /views/bookings/show.ejs -->
+
+<% layout('layouts/boilerplate') %>
+
+<h2>Booking Details</h2>
+<h3>Date: <%= date %></h3>
+<h3>Time: <%= time %></h3>
+<h3>Service: <%= service %></h3>
+<br>
+<h2>Booked By </h2>
+<h3>Username: <%= user.username %></h3>
+<h3>Name: <%= user.name %></h3>
+<h3>Mobile: <%= user.mobile %></h3>
+<br>
+<h3>Booked On: <%= createdAt.toISOString().split('T')[0] %> At: <%= createdAt.toISOString().split('T')[1].split('.')[0] %></h3>
+<h3>Last Updated On: <%= updatedAt.toISOString().split('T')[0] %> At: <%= updatedAt.toISOString().split('T')[1].split('.')[0] %></h3>
+<!-- <h3>No. of times Booking modified: <%= __v %></h3> -->
+<br>
+<% if(isModificable) { %>
+	<h3><a href="/bookings/<%= _id %>/edit">Modify Booking</a></h3>
+<% } else { %>
+	<h3>Booking is locked, and cannot be modified</h3>
+<% } %>

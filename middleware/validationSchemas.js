@@ -1,6 +1,6 @@
 // /middleware/validationSchemas.js
 
-const Joi = require('joi');
+const Joi = require('joi').extend(require('@joi/date'));
 
 module.exports.userSchema = Joi.object({
 	username: Joi.string().min(3).max(20).required(),
@@ -16,8 +16,7 @@ module.exports.locationSchema = Joi.object({
 });
 
 module.exports.bookingSchema = Joi.object({
-	date: Joi.string().required(),
-	time: Joi.string().required(),
-	service: Joi.string().required(),
-	status: Joi.string().valid('Scheduled', 'Served').required()
+	date: Joi.date().format('YYYY-MM-DD').raw().required(),
+	time: Joi.string().valid('10 am', '12 pm', '2 pm', '4 pm').required(),
+	service: Joi.string().required()
 });
